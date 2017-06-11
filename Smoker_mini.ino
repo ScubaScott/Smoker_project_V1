@@ -35,6 +35,8 @@ int giMode = 0;
 int giItem = 0;
 int giItems[4] = {195,220,165,1};
 String gsItems[4] = {"Lo Temp","Hi Temp","Done Temp","Stop when done"};
+String gaServoModes[3] {"Min","Auto","max"};
+int giServoMode = 1;
 int giLEDBlinkRate = 100;
 long glLEDBlinkTimer =0;
 boolean gbLEDState = LOW;
@@ -50,6 +52,8 @@ long glFanRunTime = 1;
 long glFanRunTimer = 0; 
 long glFanRunLimit = 10000; //max time for 1 "run". this should be 45000 for 45 seconds
 long glFanRunInterval = 120000; //Min time between runs. this should be 120000 for 2 minutes
+String gaFanModes[3] = {"Off","Auto","Stoke"};
+int giFanMode = 1;
 
 boolean gbSetup = 0;
 boolean gbDone = false;
@@ -178,12 +182,7 @@ void DrawLCD()
     glLCDTimer = millis();
     lcd.clear();
     //MAIN display logic
-    if (gbSetup){
-        lcd.selectLine(1);
-        lcd.print(gsItems[giItem]);
-        lcd.selectLine(2);
-        lcd.print(String(giItems[giItem]));
-    }else{
+    
       switch (giMode){
         case 0:
           lcd.selectLine(1);
@@ -209,15 +208,8 @@ void DrawLCD()
             lcd.setCursor(1, 16);
             lcd.print("*");
           }
-          //servo position
-          lcd.setCursor(2, 12);
-          lcd.print("s:" + String(giServoValue));
            break;
          case 1:
-           lcd.selectLine(1);
-           lcd.print("Ck Tm:");
-           break;
-         case 2:
            lcd.selectLine(1);
            lcd.print("Lo/Hi/Done tmp");
            lcd.selectLine(2);
@@ -227,12 +219,20 @@ void DrawLCD()
            lcd.print("/");
            lcd.print(String(giItems[2]));
            break;
+	case 2:
+           lcd.selectLine(1);
+           lcd.print("Servo:" + string(gaServoModes[giServoMode]));
+	  //servo position
+          lcd.selectLine(2);
+          lcd.print(String(giServoValue));
+           break;
+	case 3:
+           lcd.selectLine(1);
+           lcd.print("Fan:" + string(gaFanModes[giFanMode]));
+           lcd.selectLine(2);
+           lcd.print(String(giFanMode));
+           break;
       }
-    }
-  }
-    if (gbSetup){
-       lcd.setCursor(2, 16);
-       lcd.print("S");
     }
 
 }
